@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Protein search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://vega.github.io/vega/vega.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
+    <script src="public/js/draw_graph.js"></script>
+</head>
+<body>
+    <h1>test</h1>
+    <div id="graph-container"></div>>
+    <script>
+    function callAjax(url, callback){
+        var xmlhttp;
+        // compatible with IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function(){
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+                callback(xmlhttp.responseText);
+            }
+        }
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+    function cb_myCallback(data)
+    {
+        drawGraph = new DrawGraph(data);
+        drawGraph.main();
+    }
+    function pyRequest(key,keyType, upd_callback){
+        var cd_url;
+        cd_url = '/cgi-bin/protein-search.py?key='+ key + '&keyType=' + keyType;
+        callAjax(cd_url,upd_callback);
+    }
+
+ 	pyRequest("rnf213a","gene", cb_myCallback);
+    </script>
+</body>
+</html>
