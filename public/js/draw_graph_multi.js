@@ -1,9 +1,4 @@
-class DrawGraphSingle{
-    //one graph version
-    /*phase1 = ["64-cell stage", "256-cell stage", "dome stage", "50% epiboly stage"];
-    phase2 = ["shield stage", "bud stage", "5 somite stage"];
-    phase3 = ["16 somite stage","20 somite stage","prim 5 stage"];*/
-
+class DrawGraphMulti{
     //3 graph version
     phase1 = ["64-cell stage", "256-cell stage", "dome stage", "50% epiboly stage"];
     phase2 = ["64-cell stage","shield stage", "bud stage", "5 somite stage"];
@@ -19,41 +14,33 @@ class DrawGraphSingle{
     }
     prepareData(){
         //iterate over JSON to build a new JSON with format matching the input for Vega-lite
-        let xPos = 0;
-        let phaseCnt = 0;
-          
-        this.phases.forEach(phase => {
-            let singleData = {"x":0, "y":0, "c":0};
-            for (let i = 0; i < phase.length; i++){
-                let singleData = {"x":0, "y":0, "c":0};
-                let val = this.rawData[phase[i]];
 
-                singleData.x = xPos;
-                singleData.y = parseFloat(val);
-                singleData.c = phaseCnt
-                this.data.push(singleData);
-                xPos++;
-            }
-            phaseCnt++;
-            //at the end of each phase, add one more entry with same data as the last one to make the line connected
-            singleData.x = xPos - 1;
-            singleData.y = parseFloat(this.rawData[phase[phase.length - 1]]);
-            singleData.c = phaseCnt
-            this.data.push(singleData);
+        this.phases.forEach(phase => {
+          let tempData = [];
+          for (let i = 0; i < phase.length; i++){
+            let singleData = {"x":0, "y":0, "c":0};
+            let val = this.rawData[phase[i]];
+
+            singleData.x = i;
+            singleData.y = parseFloat(val);
+            tempData.push(singleData);
+          }
+          this.data.push(tempData)
         })
         console.log(this.data)
     }
-    prepareSpec(){
-        this.vegaObj = {
+    prepareSpec(graph_num){
+      let vegaObj = {
             "$schema": "https://vega.github.io/schema/vega/v5.json",
             "description": "A basic line chart example.",
             "width": 500,
             "height": 200,
-            "padding": 5,
+            "padding": 5, 
+          
             "data": [
               {
                 "name": "table",
-                "values": this.data
+                "values": this.data[graph_num]
               }
             ],
           
@@ -137,11 +124,17 @@ class DrawGraphSingle{
               }
             ]
           }
+      return vegaObj
     }
     main(){
         this.prepareData();
-        this.prepareSpec();
-        vegaEmbed('#graph-container', this.vegaObj);
+        for (let i = 0; i < this.data.length; i++){
+          let vegaObj = this.prepareSpec(i);
+          let divName = "#multi-graph-container-" + i.toString();
+          vegaEmbed(divName, vegaObj);
+        }
+        
+        
     }
 
 }

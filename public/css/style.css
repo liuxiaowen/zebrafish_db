@@ -1,0 +1,7 @@
+body{
+    margin:0;
+    padding:0;
+}
+#multi-graph-outer-container{
+    display:flex;
+}
