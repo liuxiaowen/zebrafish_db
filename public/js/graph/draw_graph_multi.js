@@ -67,8 +67,15 @@ class DrawGraphMulti{
             ],
           
             "axes": [
-              {"orient": "bottom", "scale": "x"},
-              {"orient": "left", "scale": "y"}
+              {
+                "orient": "bottom", 
+                "scale": "x", 
+                "title": "Expression Stage"
+              },
+              {"orient": "left", 
+              "scale": "y",
+              "title": "Log2 Ratio"
+            }
             ],
           
             "marks": [
@@ -110,7 +117,7 @@ class DrawGraphMulti{
                           "signal": "timeFormat(datum.unit0, '%B %Y') + ': ' + format(datum.change, '+.1%') + ' change from prior year'",
                         },
                         "tooltip": {
-                          "signal": "format(datum.change, '+.1%')"
+                          "signal": "{'y':datum['y']}"
                         },
                         "x": {"scale": "x", "field": "x"},
                         "y": {"scale": "y", "field": "y"},
