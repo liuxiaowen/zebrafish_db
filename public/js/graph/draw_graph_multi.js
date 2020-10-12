@@ -4,32 +4,31 @@ class DrawGraphMulti{
     phase2 = ["64-cell stage","shield stage", "bud stage", "5 somite stage"];
     phase3 = ["64-cell stage","16 somite stage","20 somite stage","prim 5 stage"];
 
-    phases = [this.phase1, this.phase2, this.phase3]
-
+    phases = [this.phase1, this.phase2, this.phase3];
+    
     vegaObj;
     data = [];
 
     constructor(rawData){
         this.rawData = JSON.parse(rawData);
     }
-    prepareData(){
+    prepareData = () => {
         //iterate over JSON to build a new JSON with format matching the input for Vega-lite
 
         this.phases.forEach(phase => {
           let tempData = [];
           for (let i = 0; i < phase.length; i++){
-            let singleData = {"x":0, "y":0, "c":0};
+            let singleData = {"x":0, "y":0};
             let val = this.rawData[phase[i]];
 
-            singleData.x = i;
+            singleData.x = phase[i];;
             singleData.y = parseFloat(val);
             tempData.push(singleData);
           }
           this.data.push(tempData)
         })
-        console.log(this.data)
     }
-    prepareSpec(graph_num){
+    prepareSpec = (graph_num) => {
       let vegaObj = {
             "$schema": "https://vega.github.io/schema/vega/v5.json",
             "description": "A basic line chart example.",
@@ -126,15 +125,18 @@ class DrawGraphMulti{
           }
       return vegaObj
     }
-    main(){
+    addGraphTitle = () => {
+      let accession = this.rawData["uniprot accession"];
+      let protName = this.rawData["protein names"];
+      document.getElementById("graph-title").innerHTML = "Uniprot Accession: " + accession + "<br/>" + "Protein Name:" + protName;
+    }
+    main = () => {
         this.prepareData();
+        this.addGraphTitle();
         for (let i = 0; i < this.data.length; i++){
           let vegaObj = this.prepareSpec(i);
           let divName = "#multi-graph-container-" + i.toString();
           vegaEmbed(divName, vegaObj);
         }
-        
-        
     }
-
 }

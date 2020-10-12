@@ -2,6 +2,9 @@ body{
     margin:0;
     padding:0;
 }
+#data-menu-div{
+    display:flex;
+}
 #multi-graph-outer-container{
     display:flex;
 }

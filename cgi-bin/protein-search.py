@@ -6,6 +6,7 @@ import sys
 import json
 import os
 import glob
+import re
 
 path = '/home/inkwchoi/Documents/Work/DrSun/data/'
 #path = '/var/www/html/public/software/protein_search/data/'
@@ -42,7 +43,8 @@ def search_data(key, keyType):
             file_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             column_names = next(file_reader)
             for row in file_reader:
-                if (row[column] == key):
+                if (re.search(key, row[column])):
+                #if (row[column] == key):
                     #create dict
                     data = {}
                     for i in range(0, len(row)):
@@ -60,10 +62,8 @@ def main():
     fail=0
     try:
         #change column name to all lower case and remove space
-        #key = str(form['key'].value)
-        #keyType = str(form['keyType'].value)
-        key = 'rnf213a'
-        keyType = 'gene'
+        key = str(form['key'].value)
+        keyType = str(form['keyType'].value)
     except:
         fail=1
     else:
@@ -79,7 +79,7 @@ def main():
     #if none
     if protein == None:
         #return error
-        error("ERROR: no matching protein was found")
+        error("No matching protein was found. Please check the protein or gene name and try again.")
     else:
         output(protein)
 

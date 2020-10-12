@@ -7,49 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="public/css/style.css">
-    <script src="https://vega.github.io/vega/vega.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.12.2"></script>
-    <script src="public/js/draw_graph.js"></script>
-    <script src="public/js/draw_graph_multi.js"></script>
+
+    <script src="lib/vega.min.js"></script>
+    <script src="lib/vega-embed.js"></script>
+
+    <script src="public/js/graph/draw_graph.js"></script>
+    <script src="public/js/graph/draw_graph_multi.js"></script>
+    <script src="public/js/request_data.js"></script>
+    <script src="public/js/event_handler.js"></script>
+    <script src="public/js/util/util.js"></script>
+    <script src="public/js/main.js"></script>
 </head>
-<body>
-    <h1>test</h1>
-    <div id="graph-container"></div>
-    <hr>
-    <div id="multi-graph-outer-container">
-        <div id="multi-graph-container-0"></div>
-        <div id="multi-graph-container-1"></div>
-        <div id="multi-graph-container-2"></div>
+<body onload="main()">
+    <h1>Protein Search</h1>
+    <div id="data-menu-div">
+        <div id="key-type-div">
+            <select name="key-type-dropdown" id="key-type-dropdown">
+                <option value="prot">UniProt Accession</option>
+                <option value="gene">Gene name</option>
+              </select>
+        </div>
+        <div id="key-div">
+            <input type="text" id="key-textbox" name="key-textbox">
+        </div>
+        <div id="search-btn-div">
+            <button type="submit" id="search-btn" name="search">Search</button>
+        </div>
+
     </div>
     
-    <script>
-    function callAjax(url, callback){
-        var xmlhttp;
-        // compatible with IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function(){
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-                callback(xmlhttp.responseText);
-            }
-        }
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
-    function cb_myCallback(data)
-    {
-        drawGraphSingle = new DrawGraphSingle(data);
-        drawGraphSingle.main();
+    <h2 id="msg"></h2>
+    <hr>
+    <!--<div id="graph-container"></div>-->
+   
 
-        drawGraphMulti = new DrawGraphMulti(data);
-        drawGraphMulti.main();
-    }
-    function pyRequest(key,keyType, upd_callback){
-        var cd_url;
-        cd_url = '/cgi-bin/protein-search.py?key='+ key + '&keyType=' + keyType;
-        callAjax(cd_url,upd_callback);
-    }
-
- 	pyRequest("rnf213a","gene", cb_myCallback);
-    </script>
+    <h3 id ="graph-title"></h3>
+    <div id="multi-graph-outer-container">
+        <div id="multi-graph-container-0" class="multi-graph-container"></div>
+        <div id="multi-graph-container-1" class="multi-graph-container"></div>
+        <div id="multi-graph-container-2" class="multi-graph-container"></div>
+    </div>
 </body>
 </html>
