@@ -37,17 +37,17 @@ def search_data(key, keyType):
     column = get_column(keyType)
     if column < 0:
         return None
-
-    for file_name in glob.glob(path+'*.csv'):
+    for file_name in glob.glob(path+'*.tsv'):
         with open(file_name) as csvfile:
-            file_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            file_reader = csv.reader(csvfile, delimiter='\t', quotechar='|')
             column_names = next(file_reader)
             for row in file_reader:
-                if (re.search(key, row[column])):
+                if (re.search(key, row[column], re.IGNORECASE)):
                 #if (row[column] == key):
                     #create dict
                     data = {}
                     for i in range(0, len(row)):
+                        print(i, len(row))
                         #format column name
                         col_name = column_names[i].lower()
                         if col_name.find("(") > 0:
@@ -83,7 +83,7 @@ def main():
     else:
         output(protein)
 
-    raise SystemExit
+    raise SystemExit 
 
 if __name__ == "__main__":
     main()
