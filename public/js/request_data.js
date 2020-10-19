@@ -20,9 +20,11 @@ class RequestData{
             let drawGraphMulti = new DrawGraphMulti(data);
             drawGraphMulti.main();
             Util.showGraph();
+            Util.showSequence();
         }else{
             document.getElementById("graph-title").innerHTML = data;
             Util.hideGraph();
+            Util.hideSequence();
         } 
     }
     static pyRequest(key,keyType){

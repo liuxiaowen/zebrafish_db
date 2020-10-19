@@ -12,9 +12,54 @@ class DrawGraphMulti{
     constructor(rawData){
         this.rawData = JSON.parse(rawData);
     }
+    filterByCheckbox = () => {
+      let checkboxes = document.getElementsByClassName("filter");
+      for (let i = 0; i < checkboxes.length; i++){
+        if (!checkboxes[i].checked){
+          if (checkboxes[i].value == "64-cell stage"){
+            let id = checkboxes[i].id;
+            let graphId = id[6];
+            if (graphId == 0){
+              this.phase1.shift();
+            }else if(graphId == 1){
+              this.phase2.shift();
+            }else if(graphId == 2){
+              this.phase3.shift();
+            }else{
+              console.log("invalid graphId");
+            }
+          }else{
+            let val = checkboxes[i].value;
+            let keepIteration = true;
+            for (let i = 0; i < this.phase1.length; i++){
+              if (this.phase1[i] == val){
+                this.phase1.splice(i, 1);
+                keepIteration = false;
+              }
+            }
+            if (keepIteration){
+              for (let i = 0; i < this.phase2.length; i++){
+                if (this.phase2[i] == val){
+                  this.phase2.splice(i, 1);
+                  keepIteration = false;
+                }
+              }
+            }
+            if(keepIteration){
+              for (let i = 0; i < this.phase3.length; i++){
+                if (this.phase3[i] == val){
+                  this.phase3.splice(i, 1);
+                  keepIteration = false;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     prepareData = () => {
+      this.filterByCheckbox();
         //iterate over JSON to build a new JSON with format matching the input for Vega-lite
-
         this.phases.forEach(phase => {
           let tempData = [];
           for (let i = 0; i < phase.length; i++){
@@ -132,14 +177,29 @@ class DrawGraphMulti{
           }
       return vegaObj
     }
+    addSequence = () => {
+      let seq = this.rawData["sequence"];
+      let shortSeq = seq;
+      /*if (seq.length > 50){
+        shortSeq = seq.slice(0, 50);
+        document.getElementById("full-seq-btn").display = "inline-block";
+      }*/
+      document.getElementById("sequence").innerHTML = "Sequence: " + shortSeq;
+    }
     addGraphTitle = () => {
       let accession = this.rawData["uniprot accession"];
       let protName = this.rawData["protein names"];
-      document.getElementById("graph-title").innerHTML = "Uniprot Accession: " + accession + "<br/>" + "Protein Name:" + protName;
+      let similarProt = this.rawData["similar protein"];
+
+      document.getElementById("graph-title").innerHTML = 
+      "Uniprot Accession: " + accession + "<br/>" + 
+      "Protein Name:" + protName + "<br/>" + 
+      "Similar Protein:" + similarProt;
     }
     main = () => {
         this.prepareData();
         this.addGraphTitle();
+        this.addSequence();
         for (let i = 0; i < this.data.length; i++){
           let vegaObj = this.prepareSpec(i);
           let divName = "#multi-graph-container-" + i.toString();
