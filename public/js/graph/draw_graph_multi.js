@@ -184,7 +184,7 @@ class DrawGraphMulti{
         shortSeq = seq.slice(0, 50);
         document.getElementById("full-seq-btn").display = "inline-block";
       }*/
-      document.getElementById("sequence").innerHTML = "Sequence: " + shortSeq;
+      document.getElementById("sequence").innerHTML = "<strong>Sequence:</strong> " + shortSeq;
     }
     addGraphTitle = () => {
       let accession = this.rawData["uniprot accession"];
@@ -192,9 +192,9 @@ class DrawGraphMulti{
       let similarProt = this.rawData["similar protein"];
 
       document.getElementById("graph-title").innerHTML = 
-      "Uniprot Accession: " + accession + "<br/>" + 
-      "Protein Name:" + protName + "<br/>" + 
-      "Similar Protein:" + similarProt;
+      "<strong>Uniprot Accession:</strong> " + accession + "<br/>" + 
+      "<strong>Protein Name:</strong> " + protName + "<br/>" + 
+      "<strong>Similar Protein:</strong> " + similarProt;
     }
     main = () => {
         this.prepareData();

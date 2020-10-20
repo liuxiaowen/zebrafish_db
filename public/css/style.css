@@ -7,7 +7,8 @@ body{
 }
 #multi-graph-outer-container{
     display:flex;
-    max-height:100%;
+    max-width:100%;
+    overflow-wrap: break-word;
 }
 #sequence-div{
     max-width:100%;
