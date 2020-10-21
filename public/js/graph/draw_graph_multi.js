@@ -66,9 +66,12 @@ class DrawGraphMulti{
             let singleData = {"x":0, "y":0};
             let val = this.rawData[phase[i]];
 
-            singleData.x = phase[i];;
+            singleData.x = phase[i];
             singleData.y = parseFloat(val);
-            tempData.push(singleData);
+
+            if (!isNaN(singleData.y)){
+              tempData.push(singleData);
+            }
           }
           this.data.push(tempData)
         })
@@ -189,12 +192,10 @@ class DrawGraphMulti{
     addGraphTitle = () => {
       let accession = this.rawData["uniprot accession"];
       let protName = this.rawData["protein names"];
-      let similarProt = this.rawData["similar protein"];
 
       document.getElementById("graph-title").innerHTML = 
       "<strong>Uniprot Accession:</strong> " + accession + "<br/>" + 
-      "<strong>Protein Name:</strong> " + protName + "<br/>" + 
-      "<strong>Similar Protein:</strong> " + similarProt;
+      "<strong>Protein Name:</strong> " + protName; 
     }
     main = () => {
         this.prepareData();
