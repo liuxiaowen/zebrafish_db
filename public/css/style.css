@@ -1,0 +1,27 @@
+body{
+    margin:0;
+    padding:0;
+}
+#data-menu-div{
+    display:flex;
+}
+#multi-graph-outer-container{
+    display:flex;
+    max-width:100%;
+    overflow-wrap: break-word;
+}
+#sequence-div{
+    max-width:100%;
+    overflow-wrap: break-word;
+}
+#data-filter-div{
+    display:flex;
+}
+#data-filter-div div{
+    margin: 15px;
+}
+
+#filter-btn{
+    position:relative;
+    top:80%;
+}

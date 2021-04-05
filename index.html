@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Protein search</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="public/css/style.css">
+
+    <script src="lib/vega.min.js"></script>
+    <script src="lib/vega-embed.js"></script>
+
+    <script src="public/js/graph/draw_graph.js"></script>
+    <script src="public/js/graph/draw_graph_multi.js"></script>
+    <script src="public/js/request_data.js"></script>
+    <script src="public/js/event_handler.js"></script>
+    <script src="public/js/util/util.js"></script>
+    <script src="public/js/main.js"></script>
+</head>
+<body onload="main()">
+    <h1>Zebrafish Protein DB Search</h1>
+    <div id="data-menu-div">
+        <div id="key-type-div">
+            <select name="key-type-dropdown" id="key-type-dropdown">
+                <option value="prot">UniProt Accession</option>
+                <option value="gene">Gene name</option>
+                </select>
+        </div>
+        <div id="key-div">
+            <input type="text" id="key-textbox" name="key-textbox">
+        </div>
+        <div id="search-btn-div">
+            <button type="submit" id="search-btn" name="search">Search</button>
+        </div>
+    </div>
+    <div id="data-filter-div">
+        <div id="graph-0-filter-div">
+            <span>Graph 1</span><br>
+            <input type="checkbox" id="graph-0-checkbox-0" name="64-stage-1" value="64-cell stage" class="filter" checked=true>
+            <label for="graph-0-checkbox-1"> 64-cell stage</label><br>
+            <input type="checkbox" id="graph-0-checkbox-1" name="256-stage" value="256-cell stage" class="filter" checked=true>
+            <label for="graph-0-checkbox-2"> 256-cell stage</label><br>
+            <input type="checkbox" id="graph-0-checkbox-2" name="dome-stage" value="dome stage" class="filter" checked=true>
+            <label for="graph-0-checkbox-3"> dome stage</label><br>
+            <input type="checkbox" id="graph-0-checkbox-3" name="50-epiboly-stage" value="50% epiboly stage" class="filter" checked=true>
+            <label for="graph-0-checkbox-3"> 50% epiboly stage</label><br>
+        </div>
+        <div id="graph-1-filter-div">
+            <span>Graph 2</span><br>
+            <input type="checkbox" id="graph-1-checkbox-0" name="64-stage-2" value="64-cell stage" class="filter" checked=true>
+            <label for="graph-1-checkbox-0"> 64-cell stage</label><br>
+            <input type="checkbox" id="graph-1-checkbox-1" name="shield-stage" value="shield stage" class="filter" checked=true>
+            <label for="graph-1-checkbox-1"> shield stage</label><br>
+            <input type="checkbox" id="graph-1-checkbox-2" name="bud-stage" value="bud stage" class="filter" checked=true>
+            <label for="graph-1-checkbox-2"> bud stage</label><br>
+            <input type="checkbox" id="graph-1-checkbox-3" name="5-somite-stage" value="5 somite stage" class="filter" checked=true>
+            <label for="graph-1-checkbox-3"> 5 somite stage</label><br>
+        </div>
+        <div id="graph-2-filter-div">
+            <span>Graph 3</span><br>
+            <input type="checkbox" id="graph-2-checkbox-0" name="64-stage-3" value="64-cell stage" class="filter" checked=true>
+            <label for="graph-2-checkbox-0"> 64-cell stage</label><br>
+            <input type="checkbox" id="graph-2-checkbox-1" name="16-somite-stage" value="16 somite stage" class="filter" checked=true>
+            <label for="graph-2-checkbox-1"> 16 somite stage</label><br>
+            <input type="checkbox" id="graph-2-checkbox-2" name="20-somite-stage" value="20 somite stage" class="filter" checked=true>
+            <label for="graph-2-checkbox-2"> 20 somite stage</label><br>
+            <input type="checkbox" id="graph-2-checkbox-3" name="prim-5-stage" value="prim 5 stage" class="filter" checked=true>
+            <label for="graph-2-checkbox-3"> prim 5 stage</label><br>
+        </div>
+        <div id="filter-btn-div">
+            <button type="submit" id="filter-btn" name="filter-btn">Filter Graph</button>
+        </div>
+    </div>
+    
+    <h2 id="msg"></h2>
+    <hr>
+    <!--<div id="graph-container"></div>-->
+
+    <p id ="graph-title"></p>
+    <div id="multi-graph-outer-container">
+        <div id="multi-graph-container-0" class="multi-graph-container"></div>
+        <div id="multi-graph-container-1" class="multi-graph-container"></div>
+        <div id="multi-graph-container-2" class="multi-graph-container"></div>
+    </div>
+    <div id="sequence-div">
+        <p id ="sequence"></p>
+        <button type="submit" id="full-seq-btn" name="full-seq" style="display:none">Show Full Sequence</button>
+    </div>
+   
+</body>
+</html>
