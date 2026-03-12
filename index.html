@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://www.toppic.org/software/zebrafishdb/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title> ZebraFish DB </title>
+    <link href="https://www.toppic.org/software/zebrafishdb/assets/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://www.toppic.org/software/zebrafishdb/assets/js/bootstrap.bundle.min.js"></script>
+    
+</head>
+
+<body>
+
+<nav id="header" class="navbar navbar-dark sticky-top bg-info p-0 shadow" style="width:100%;">
+	<a id="header_link" class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="index.html#">ZebraFish Database</a>
+</nav>
+
+
+<div class="container-fluid">
+    <br>
+    <input type="text" id="myInput" size="40" onkeyup="myFunction()" placeholder="Search for Accession Number or Gene" title="Type in a name">
+	<div class="row">
+		<br>
+		<div class="table-responsive">
+			<table id="dataTable" style="width:100%; overflow-y:scroll;" class="table table-sm table-striped table-hover">
+				<thead>
+				<tr id="tableHeader">
+				</tr>
+				</thead>
+				<tbody id="tableBody">
+                </tbody>
+			</table>
+		</div>
+    </div>
+</div>
+
+<script>
+function createHeaderElement(columnText, styling) {
+    createDataElement("th", columnText, "tableHeader", styling);
+}
+
+function createDataElement(htmlTag, innerText, idParent, styling) {
+    let node = document.createElement(htmlTag);
+    let textnode = document.createTextNode(innerText);
+    node.appendChild(textnode);
+    if (styling == 1)
+        node.style.whiteSpace = 'pre';
+    else if (styling == 2)
+        node.style.display = 'none';
+    else
+        node.style.textTransform = 'none';
+    document.getElementById(idParent).appendChild(node);
+}
+
+function createCellData(rowIndex, dataIndex, cellText) {
+    if(dataIndex === 0) {
+        let node = document.createElement("tr");
+        node.setAttribute("id", "row" + rowIndex);
+        document.getElementById("tableBody").appendChild(node);
+        createDataElement("td", cellText, "row" + rowIndex, 0);
+    } else {
+        if(dataIndex === 1 || dataIndex === 3)
+            createDataElement("td", cellText, "row" + rowIndex, 1);
+        else if(dataIndex === 2)
+            createDataElement("td", cellText, "row" + rowIndex, 2);
+        else
+            createDataElement("td", cellText, "row" + rowIndex, 0);
+    }
+}
+
+function assign_values(results){
+    console.log("Read Data from file!!")
+    const dataArray = results.split("\n");
+    
+	for(let i = 0; i < dataArray.length; i++) {
+        
+		if(i === 0) {
+            const data = dataArray[i].split("&");
+            for(let j = 0; j < data.length; j++)
+                if (j == 2)
+                    createHeaderElement(data[j], 2);
+                else
+                    createHeaderElement(data[j], 0);
+        }
+        
+		else if(i > 0) {
+            const data = dataArray[i].split("&");
+            for(let j = 0; j < data.length; j++)
+                if (j == 1)
+                    createCellData(i, j, data[j].trim().split(";").join("\r\n"));
+                else if (j == 3)
+                    createCellData(i, j, data[j].trim().split(" ").join("\r\n"));
+                else if (j >= 3 && j < 18)
+                    createCellData(i, j, parseFloat(data[j].trim()).toFixed(3));
+				else if(j == 19) {
+					if (data[j].trim() == 1)
+						createCellData(i, j, "Yes");
+					else
+						createCellData(i, j, "No");
+				}
+                else
+                    createCellData(i, j, data[j].trim());
+        }
+    }
+
+    document.getElementById('dataTable').addEventListener('click', e => {
+        let tr = e.target.closest('tr');
+        if (tr) {
+            // var data = tr.innerText.split('\t');
+			// console.log(tr.innerText)
+			//console.log(dataArray[data[0]])
+            // redirect(dataArray[data[0]]);
+            let rowIndex = tr.rowIndex;
+            redirect(dataArray[rowIndex]);
+        }
+    });
+
+}
+
+function redirect(data) {
+    var url = "https://www.toppic.org/software/zebrafishdb/detailed_view.html";
+    window.location.assign(url + "?" + data);
+    return false;
+}
+
+function myFunction() {
+    var input = document.getElementById("myInput");
+    var filter = input.value.toUpperCase();
+    table = document.getElementById("dataTable");
+    tr = table.getElementsByTagName("tr");
+    for (var row_idx = 1; row_idx < tr.length; row_idx++) {
+        var td = tr[row_idx].getElementsByTagName("td");
+        tr[row_idx].style.display = "none";
+        for (var cell_idx = 0; cell_idx < td.length; cell_idx++) {
+            if (td[cell_idx].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                tr[row_idx].style.display = "";
+                continue;
+            }
+        }
+    }
+}
+
+fetch("https://www.toppic.org/software/zebrafishdb/assets/web_v3_amp.csv", { mode: 'no-cors'})
+	.then(response => response.text())
+	.then(text => assign_values(text))
+
+</script>
+
+
+
+
+
+</body></html>

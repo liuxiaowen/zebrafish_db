@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)https://www.toppic.org/software/zebrafishdb/detailed_view.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Detailed View of a Protein</title>
+    <link href="https://www.toppic.org/software/zebrafishdb/assets/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://www.toppic.org/software/zebrafishdb/db_zebrafish/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+</head>
+<body>
+<header class="navbar navbar-dark sticky-top bg-info flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="index.html">ZebraFish Database</a>
+</header>
+<br>
+<div class="card">
+    <div class="card-header">
+        Detailed Protein View
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+
+            <div class="row">
+            <p id="accessionHeader" style="font-weight: bold" class="col-3"> Protein Accessions: </p>
+            <p id="accession" class="col-6"></p>
+            </div>
+
+            <div class="row">
+                <p id="descriptionHeader" style="font-weight: bold" class="col-3"> Protein names: </p>
+                <p id="description" class="col-6"></p>
+            </div>
+
+            <div class="row">
+                <p id="geneHeader" style="font-weight: bold" class="col-3"> Gene: </p>
+                <p id="gene" class="col-6"></p>
+            </div>
+			
+			<div class="row">
+                <p id="significantHeader" style="font-weight: bold" class="col-3"> Significantly Differentially Expressed: </p>
+                <p id="significant" class="col-6"></p>
+            </div>
+
+            <br>
+            <br>
+
+            <canvas id="myChart" style="width:100%;max-width:800px; display: block;margin-left: auto;margin-right: auto;"></canvas>
+
+        </blockquote>
+    </div>
+</div>
+
+<script>
+window.onload = (event) => {
+    var link = window.location.href;
+    // let data = link.split("?")[1].split('&');
+    let data = decodeURIComponent(link.split("?")[1]).split('&');
+    console.log(data[0], data[1], data[2]);
+    document.getElementById('accession').innerHTML = data[0].split(';').join('\n');
+    // document.getElementById('accession').style.whiteSpace = 'pre';
+
+    document.getElementById('description').innerHTML = data[1];
+    // document.getElementById('description').style.whiteSpace = 'pre';
+
+
+    document.getElementById('gene').innerHTML = data[2];
+    // document.getElementById('gene').style.whiteSpace = 'pre';
+	
+	if (data[19] == 0)
+	  document.getElementById('significant').innerHTML = "No";
+	else 
+	  document.getElementById('significant').innerHTML = "Yes";
+    // document.getElementById('significant').style.whiteSpace = 'pre';
+
+
+    // var xValues = [0, 1, 2, 3];
+    var abundance_arr = []
+    for (var i = 3; i <= 18; i++)
+        // abundance_arr.push(parseFloat(data[i].trim()));
+        abundance_arr.push(parseFloat(data[i]));
+
+    // var xLabels = ["64-cell stage", "256-cell stage", "Dome stage", "50% epiboly"];
+    var xLabels = [
+    "1-cell","2-cell","16-cell","128-cell","1k-cell",
+    "Oblong","Dome","50%-epiboly","Shield","75%-epiboly",
+    "Bud","6-Somite","14-Somite","21-Somite","26-Somite","Prim-5"
+    ];
+    // console.log(abundance_arr, xValues);
+
+    new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: xLabels,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgb(0,0,0)",
+                borderWidth: 2,
+                data: abundance_arr
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: -1,
+                        max:1,
+                        fontSize: 16,
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Log2 Intensity Ratio',
+                        fontSize: 16,
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontSize: 16
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time',
+                        fontSize: 16,
+                    }
+                }]
+            },
+            title: {
+                display: true,
+                text: "Protein Expression",
+                fontSize: 24,
+            }
+        }
+    });
+}
+</script>
+
+
+
+</body></html>
