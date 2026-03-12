@@ -4,8 +4,25 @@
     
     <title> ZebraFish DB </title>
     <link href="https://www.toppic.org/software/zebrafishdb/assets/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://www.toppic.org/software/zebrafishdb/assets/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="ps://www.toppic.org/software/zebrafishdb/assets/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        #dataTable {
+            table-layout: fixed;
+            width: 100%; 
+        }
+
+        #dataTable td, #dataTable th {
+            word-wrap: break-word;
+            white-space: normal;
+            overflow-wrap: break-word; /* extra safety */
+        }
+
+        #dataTable th:nth-child(2), 
+        #dataTable td:nth-child(2) {
+            max-width: 300px;  /* adjust as needed */
+        }
+    </style>
 </head>
 
 <body>
@@ -20,16 +37,14 @@
     <input type="text" id="myInput" size="40" onkeyup="myFunction()" placeholder="Search for Accession Number or Gene" title="Type in a name">
 	<div class="row">
 		<br>
-		<div class="table-responsive">
-			<table id="dataTable" style="width:100%; overflow-y:scroll;" class="table table-sm table-striped table-hover">
-				<thead>
-				<tr id="tableHeader">
-				</tr>
-				</thead>
-				<tbody id="tableBody">
-                </tbody>
-			</table>
-		</div>
+            <div class="table-responsive" style="overflow-x:auto;">
+                <table id="dataTable" class="table table-sm table-striped table-hover">
+                    <thead>
+                        <tr id="tableHeader"></tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
     </div>
 </div>
 
@@ -42,12 +57,8 @@ function createDataElement(htmlTag, innerText, idParent, styling) {
     let node = document.createElement(htmlTag);
     let textnode = document.createTextNode(innerText);
     node.appendChild(textnode);
-    if (styling == 1)
-        node.style.whiteSpace = 'pre';
-    else if (styling == 2)
+    if (styling == 2)
         node.style.display = 'none';
-    else
-        node.style.textTransform = 'none';
     document.getElementById(idParent).appendChild(node);
 }
 
@@ -139,7 +150,8 @@ function myFunction() {
     }
 }
 
-fetch("https://www.toppic.org/software/zebrafishdb/assets/web_v3_amp.csv", { mode: 'no-cors'})
+// fetch("data/web_v2_amp.csv", { mode: 'no-cors'})
+fetch("https://www.toppic.org/software/zebrafishdb/assets/web_v3_amp.csv")
 	.then(response => response.text())
 	.then(text => assign_values(text))
 
